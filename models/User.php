@@ -4,15 +4,16 @@ namespace app\models;
 
 use Yii;
 use yii\web\IdentityInterface;
-use yii\web\Link; // represents a link object as defined in JSON Hypermedia API Language.
+use yii\web\Link;
 use yii\web\Linkable;
 use yii\helpers\Url;
-
+//use yii\db\ActiveRecord;
 /**
  * This is the model class for table "User".
  *
  * @property int $id
  * @property string $username
+ * @property string $email
  * @property string $password
  * @property string $authKey
  * @property string $accessToken
@@ -33,8 +34,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface ,Linkable
     public function rules()
     {
         return [
-            [['username', 'password','email', 'authKey', 'accessToken'], 'required'],
-            [['username', 'password', 'email','authKey', 'accessToken'], 'string', 'max' => 20],
+            [['username', 'password','email', 'accessToken'], 'required'],
+            [['username', 'password', 'email', 'accessToken'], 'string', 'max' => 20],
+            ['username','unique', 'message' => '用户名已存在.'],
         ];
     }
 
@@ -54,11 +56,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface ,Linkable
     public function fields()
     {
         return [
-            // 字段名和属性名相同
             'id',
-            // 字段名为"email", 对应的属性名为"email_address"
             'email' ,
-            // 字段名为"name", 值由一个PHP回调函数定义
             'name' => 'username',
         ];
     }
@@ -67,8 +66,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface ,Linkable
         return [
             Link::REL_SELF => Url::to(['user/view', 'id' => $this->id], true),
             'edit' => Url::to(['user/view', 'id' => $this->id], true),
-          //'profile' => Url::to(['country/view'], true),
-            //'index' => Url::to(['users'], true),
         ];
     }
     public function extraFields()
@@ -106,5 +103,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface ,Linkable
     public function validatePassword($password)
     {
         return $this->password === $password;
+    }
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($this->isNewRecord) {
+                $this->authKey = \Yii::$app->security->generateRandomString();
+            }
+            return true;
+        }
+        return false;
     }
 }

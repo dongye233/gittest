@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
-
+use yii\helpers;
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
@@ -59,6 +59,13 @@ $this->title = 'My Yii Application';
   print_r($models);
   echo "<br>";
   echo $a;
+   $session = Yii::$app->session;
+  echo $session->isActive;
+   $indexed = ['Qiang', 'Paul'];
+   echo helpers\ArrayHelper::isIndexed($indexed);
+   $associative = [0 => 'Yii', 'version' => '2.0'];
+   echo helpers\ArrayHelper::isAssociative($associative);
+   echo $relativeHomeUrl = helpers\Url::home(true);
    ?>
 </div>
 

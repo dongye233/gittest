@@ -20,7 +20,7 @@ class CountryController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
+            'vserb' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],

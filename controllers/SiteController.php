@@ -27,7 +27,7 @@ class SiteController extends Controller
         $this->bookingService = $bookingService;
 
     }
-    public function behaviors()
+    public function referrers()
     {
         return [
             'access' => [
@@ -101,8 +101,14 @@ class SiteController extends Controller
             ],
         ]);
         $models=$provider->getModels();
+        $insert=new User();
+        $insert->username="testbefore3";
+        $insert->password="testbefore";
+        $insert->email="a";
+        $insert->accessToken="aaaa";
+        //$insert->authKey="aaaa";
+        $insert->save();
         $a=User::findOne(1)->username;
-
 
         return $this->render('index',['models' => $models,'sort' => $sort,"a"=>$a]);
     }
@@ -122,7 +128,6 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
-
         $model->password = '';
         return $this->render('login', [
             'model' => $model,
