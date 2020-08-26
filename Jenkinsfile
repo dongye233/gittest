@@ -4,7 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 
-                bat label: '', script: 'copy C:\Users\founq\.jenkins\workspace\test_dev D:\git\'
+                bat label: '', script: 'copy C:\\Users\\founq\\.jenkins\\workspace\\test_dev D:\\git\\'
             }
         }
     }
